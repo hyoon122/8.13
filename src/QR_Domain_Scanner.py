@@ -34,3 +34,32 @@ def scan_qr_code(image_path):
             "suspicious": is_suspicious
         })
     return results
+
+# 이미지에서 텍스트 기반 URL 탐지
+def scan_text_for_urls(image_path):
+    img = cv2.imread(image_path)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # 이미지 전처리 (노이즈 제거)
+    gray = cv2.medianBlur(gray, 3)
+
+    # pytesseract 불러오기 (OCR)
+    try:
+        import pytesseract
+    except ImportError:
+        print("[!] pytesseract 모듈이 필요합니다. 설치: pip install pytesseract")
+        return []
+
+    text = pytesseract.image_to_string(gray)
+    urls = re.findall(r"https?://[\w./-]+", text)
+
+    results = []
+    for url in urls:
+        domain = extract_domain(url)
+        is_suspicious = is_suspicious_domain(domain) if domain else False
+        results.append({
+            "url": url,
+            "domain": domain,
+            "suspicious": is_suspicious
+        })
+    return results
