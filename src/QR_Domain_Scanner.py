@@ -77,3 +77,17 @@ def main(image_path):
             print(f" 의심 여부: {'⚠️ 의심' if r['suspicious'] else '✅ 안전'}\n")
     else:
         print("[QR 코드 없음]")
+    
+    text_results = scan_text_for_urls(image_path)
+    if text_results:
+        print("\n[텍스트 URL 분석 결과]")
+        for r in text_results:
+            print(f" URL: {r['url']}")
+            print(f" 도메인: {r['domain']}")
+            print(f" 의심 여부: {'⚠️ 의심' if r['suspicious'] else '✅ 안전'}\n")
+    else:
+        print("[텍스트 URL 없음]")
+
+if __name__ == "__main__":
+    test_image = "test.png"  # 분석할 이미지 파일 경로
+    main(test_image)
