@@ -63,3 +63,17 @@ def scan_text_for_urls(image_path):
             "suspicious": is_suspicious
         })
     return results
+
+# 메인 실행부
+def main(image_path):
+    print(f"[+] {image_path} 파일 분석 시작...")
+
+    qr_results = scan_qr_code(image_path)
+    if qr_results:
+        print("\n[QR 코드 분석 결과]")
+        for r in qr_results:
+            print(f" QR 데이터: {r['data']}")
+            print(f" 도메인: {r['domain']}")
+            print(f" 의심 여부: {'⚠️ 의심' if r['suspicious'] else '✅ 안전'}\n")
+    else:
+        print("[QR 코드 없음]")
